@@ -1,0 +1,49 @@
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\bin\Debug\KWDM_Segm.exe.config
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\bin\Debug\KWDM_Segm.exe
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\bin\Debug\KWDM_Segm.pdb
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csprojAssemblyReference.cache
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\MainWindow.g.cs
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\App.g.cs
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm_MarkupCompile.cache
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm_MarkupCompile.lref
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\MainWindow.baml
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.g.resources
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.Properties.Resources.resources
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csproj.GenerateResource.cache
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csproj.CoreCompileInputs.cache
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.exe
+E:\SzkolaUni\KWDM\PROJEKT_PROGRAM\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.pdb
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\bin\Debug\KWDM_Segm.exe.config
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\bin\Debug\KWDM_Segm.exe
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\bin\Debug\KWDM_Segm.pdb
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csprojAssemblyReference.cache
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\Interop.MLApp.dll
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csproj.ResolveComReference.cache
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\MainWindow.g.cs
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\App.g.cs
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm_MarkupCompile.cache
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm_MarkupCompile.lref
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\MainWindow.baml
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.g.resources
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.Properties.Resources.resources
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csproj.GenerateResource.cache
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.exe
+C:\Users\hp\Desktop\KWDM PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.pdb
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\bin\Debug\KWDM_Segm.exe.config
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\bin\Debug\KWDM_Segm.exe
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\bin\Debug\KWDM_Segm.pdb
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csprojAssemblyReference.cache
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\Interop.MLApp.dll
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csproj.ResolveComReference.cache
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\MainWindow.g.cs
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\App.g.cs
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm_MarkupCompile.cache
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm_MarkupCompile.lref
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\MainWindow.baml
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.g.resources
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.Properties.Resources.resources
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csproj.GenerateResource.cache
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.exe
+C:\Users\hp\Desktop\KWDM_PROJEKT\KWDM_Segm\KWDM_Segm\obj\Debug\KWDM_Segm.pdb

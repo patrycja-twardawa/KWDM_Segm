@@ -1,0 +1,200 @@
+{
+	"0008,0016" : 
+	{
+		"Name" : "SOPClassUID",
+		"Type" : "String",
+		"Value" : "1.2.840.10008.5.1.4.1.1.7"
+	},
+	"0008,0018" : 
+	{
+		"Name" : "SOPInstanceUID",
+		"Type" : "String",
+		"Value" : "1.3.6.1.4.1.9590.100.1.2.416850492912796688318173508382775430368"
+	},
+	"0008,0020" : 
+	{
+		"Name" : "StudyDate",
+		"Type" : "String",
+		"Value" : ""
+	},
+	"0008,0023" : 
+	{
+		"Name" : "ContentDate",
+		"Type" : "String",
+		"Value" : "20190413"
+	},
+	"0008,0030" : 
+	{
+		"Name" : "StudyTime",
+		"Type" : "String",
+		"Value" : ""
+	},
+	"0008,0033" : 
+	{
+		"Name" : "ContentTime",
+		"Type" : "String",
+		"Value" : "164359.921000"
+	},
+	"0008,0050" : 
+	{
+		"Name" : "AccessionNumber",
+		"Type" : "String",
+		"Value" : ""
+	},
+	"0008,0060" : 
+	{
+		"Name" : "Modality",
+		"Type" : "String",
+		"Value" : "US"
+	},
+	"0008,0064" : 
+	{
+		"Name" : "ConversionType",
+		"Type" : "String",
+		"Value" : "WSD"
+	},
+	"0008,0090" : 
+	{
+		"Name" : "ReferringPhysicianName",
+		"Type" : "String",
+		"Value" : "Strange^Steven"
+	},
+	"0010,0010" : 
+	{
+		"Name" : "PatientName",
+		"Type" : "String",
+		"Value" : "Stachurski^Jacek"
+	},
+	"0010,0020" : 
+	{
+		"Name" : "PatientID",
+		"Type" : "String",
+		"Value" : "1"
+	},
+	"0010,0030" : 
+	{
+		"Name" : "PatientBirthDate",
+		"Type" : "String",
+		"Value" : ""
+	},
+	"0010,0040" : 
+	{
+		"Name" : "PatientSex",
+		"Type" : "String",
+		"Value" : ""
+	},
+	"0018,0015" : 
+	{
+		"Name" : "BodyPartExamined",
+		"Type" : "String",
+		"Value" : "Prawa dlon"
+	},
+	"0018,1016" : 
+	{
+		"Name" : "SecondaryCaptureDeviceManufacturer",
+		"Type" : "String",
+		"Value" : "MathWorks"
+	},
+	"0018,1018" : 
+	{
+		"Name" : "SecondaryCaptureDeviceManufacturerModelName",
+		"Type" : "String",
+		"Value" : "MATLAB"
+	},
+	"0020,000d" : 
+	{
+		"Name" : "StudyInstanceUID",
+		"Type" : "String",
+		"Value" : "1.1"
+	},
+	"0020,000e" : 
+	{
+		"Name" : "SeriesInstanceUID",
+		"Type" : "String",
+		"Value" : "1.2.840.113619.2.55.3.2831219201.818.12178234.2"
+	},
+	"0020,0010" : 
+	{
+		"Name" : "StudyID",
+		"Type" : "String",
+		"Value" : "1"
+	},
+	"0020,0011" : 
+	{
+		"Name" : "SeriesNumber",
+		"Type" : "String",
+		"Value" : "2"
+	},
+	"0020,0013" : 
+	{
+		"Name" : "InstanceNumber",
+		"Type" : "String",
+		"Value" : "2"
+	},
+	"0020,0020" : 
+	{
+		"Name" : "PatientOrientation",
+		"Type" : "String",
+		"Value" : ""
+	},
+	"0028,0002" : 
+	{
+		"Name" : "SamplesPerPixel",
+		"Type" : "String",
+		"Value" : "3"
+	},
+	"0028,0004" : 
+	{
+		"Name" : "PhotometricInterpretation",
+		"Type" : "String",
+		"Value" : "RGB"
+	},
+	"0028,0006" : 
+	{
+		"Name" : "PlanarConfiguration",
+		"Type" : "String",
+		"Value" : "0"
+	},
+	"0028,0010" : 
+	{
+		"Name" : "Rows",
+		"Type" : "String",
+		"Value" : "323"
+	},
+	"0028,0011" : 
+	{
+		"Name" : "Columns",
+		"Type" : "String",
+		"Value" : "598"
+	},
+	"0028,0100" : 
+	{
+		"Name" : "BitsAllocated",
+		"Type" : "String",
+		"Value" : "8"
+	},
+	"0028,0101" : 
+	{
+		"Name" : "BitsStored",
+		"Type" : "String",
+		"Value" : "8"
+	},
+	"0028,0102" : 
+	{
+		"Name" : "HighBit",
+		"Type" : "String",
+		"Value" : "7"
+	},
+	"0028,0103" : 
+	{
+		"Name" : "PixelRepresentation",
+		"Type" : "String",
+		"Value" : "0"
+	},
+	"7fe0,0010" : 
+	{
+		"Name" : "PixelData",
+		"Type" : "Null",
+		"Value" : null
+	}
+}
