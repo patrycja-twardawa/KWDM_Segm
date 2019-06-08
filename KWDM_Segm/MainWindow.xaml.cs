@@ -16,12 +16,24 @@ using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
 using System.Text.RegularExpressions;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace KWDM_Segm
 {
     /// <summary>
     /// Logika interakcji dla klasy MainWindow.xaml
     /// </summary>
+    public static class ExtensionMethods
+    {
+        private static Action EmptyDelegate = delegate () { };
+
+        public static void Refresh(this UIElement uiElement)
+        {
+            uiElement.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
+        }
+    }
+
     public partial class MainWindow : Window
     {
 
@@ -81,14 +93,15 @@ namespace KWDM_Segm
             OrthStop();
 
             //DaneObrazoweLabel.Content = res[0].ToString(); //TEST W LABELU, CZY COKOLWIEK SIĘ POJAWIA - powinny się pojawiać id pacjentów
-            string wynik = Regex.Replace(res[0].ToString(), "[@_]", string.Empty); //usuwanie dodatkowych znaków (dla wyrównania tablic charów w 2015a - nie ma klasy string)
+            string wynik = Regex.Replace(res[0].ToString(), @"[_]", string.Empty); //usuwanie dodatkowych znaków (dla wyrównania tablic charów w 2015a - nie ma klasy string)
+            wynik = RemoveLastEscape(wynik);
             lista_pacjentow = new List<string>(Regex.Split(wynik, "\n")); 
             lista_id = new List<string>(Regex.Split(res[1].ToString(), "\n"));
 
             ListaPacjentow.ItemsSource = lista_pacjentow;
-            ListaBadan.Items.Clear();
-            ListaSerii.Items.Clear();
-            ListaInstancji.Items.Clear();
+            ListaBadan.ItemsSource = null;
+            ListaSerii.ItemsSource = null;
+            ListaInstancji.ItemsSource = null;
             ImageO1.Source = null;
             ImageO2.Source = null;
         }
@@ -106,14 +119,12 @@ namespace KWDM_Segm
             object[] res = result as object[];
             OrthStop();
 
+            res[0] = RemoveLastEscape(res[0].ToString());
             List<string> lista_badan = new List<string>(Regex.Split(res[0].ToString(), "\n"));
 
-            ListaBadan.SelectedIndex = -1;
-            ListaSerii.SelectedIndex = -1;
-            ListaInstancji.SelectedIndex = -1;
             ListaBadan.ItemsSource = lista_badan;
-            ListaSerii.Items.Clear();
-            ListaInstancji.Items.Clear();
+            ListaSerii.ItemsSource = null;
+            ListaInstancji.ItemsSource = null;
             ImageO1.Source = null;
             ImageO2.Source = null;
         }
@@ -130,10 +141,11 @@ namespace KWDM_Segm
             object[] res = result as object[];
             OrthStop();
 
+            res[0] = RemoveLastEscape(res[0].ToString());
             lista_serii = new List<string>(Regex.Split(res[0].ToString(), "\n"));
 
             ListaSerii.ItemsSource = lista_serii;
-            ListaInstancji.Items.Clear();
+            ListaInstancji.ItemsSource = null;
             ImageO1.Source = null;
             ImageO2.Source = null;
         }
@@ -149,6 +161,7 @@ namespace KWDM_Segm
             object[] res = result as object[];
             OrthStop();
 
+            res[0] = RemoveLastEscape(res[0].ToString());
             List<string> lista_instancji = new List<string>(Regex.Split(res[0].ToString(), "\n"));
 
             ListaInstancji.ItemsSource = lista_instancji;
@@ -158,8 +171,13 @@ namespace KWDM_Segm
 
         private void WczytajObrazMatlab(string list_string)
         {
-            System.IO.DirectoryInfo di = new DirectoryInfo(path + "\\temp");
-            foreach (FileInfo file in di.GetFiles()) { file.Delete(); }
+            if (Directory.Exists(path + "\\temp"))
+            {
+                System.IO.DirectoryInfo di = new DirectoryInfo(path + "\\temp");
+                foreach (FileInfo file in di.GetFiles()) { file.Delete(); }
+                di.Delete();
+            }
+            Directory.CreateDirectory(path + "\\temp");
 
             MLApp.MLApp matlab = MatlabInitialize();
             actual_instance = list_string;
@@ -168,11 +186,15 @@ namespace KWDM_Segm
             matlab.Execute(@"cd " + path);
             object result = null; // wyjście default
             object result2 = null;
-            matlab.Feval("OrthancDownloadInstance", 1, out result, list_string); //wywołanie funkcji
+            //Task t = Task.Run(() => {
+            matlab.Feval("OrthancDownloadInstance", 1, out result, list_string); //wywołanie funkcji});
             OrthStop();
             matlab.Feval("DicomConvert", 0, out result2, list_string); //przekształcenie na format png - I TAK ZOSTAWIĆ, OBRAZ BĘDZIE SŁUŻYĆ TYLKO DO WYŚWIETLANIA W OKNIE PROGRAMU
+            //});
+            //t.Wait();
+            //t.Dispose();
 
-            int lr = 2; //2 okna
+            int lr = 0; //2 okna
             DispImage(actual_img, lr);
         }
 
@@ -238,9 +260,17 @@ namespace KWDM_Segm
 
         private void DispImage(string name_img, int lr)
         {
+            ImageO1.Source = null;
+            ImageO2.Source = null;
+            UpdateLayout();
+            GC.Collect();
+            DirectoryInfo dir = new DirectoryInfo(path + "\\temp");
+            dir.Refresh();
+
             string file_name = path + "\\temp\\" + name_img + ".png"; //ew. Label.Content = file_name;
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
             bitmap.UriSource = new Uri(file_name);
             bitmap.EndInit();
 
@@ -251,6 +281,18 @@ namespace KWDM_Segm
                 ImageO1.Source = bitmap;
                 ImageO2.Source = bitmap;
             }
+
+            //ImageO1.Refresh();
+            //ImageO2.Refresh();
+        }
+
+        private string RemoveLastEscape(string temp)
+        {
+            if (temp.Substring(temp.Length - 1) == '\n'.ToString())
+            {
+                temp = temp.Remove(temp.Length - 1);
+            }
+            return temp;
         }
 
         // FUNKCJE POMOCNICZE DLA MATLABA
