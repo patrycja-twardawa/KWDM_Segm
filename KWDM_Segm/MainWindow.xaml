@@ -72,5 +72,14 @@
 
         <Image Name="ImageO1" Source="Blank.png" HorizontalAlignment="Left" Height="230" Margin="194.2,203,0,0" VerticalAlignment="Top" Width="230" Grid.Column="3" Stretch="UniformToFill"/>
         <Image Name="ImageO2" Source="Blank.png" HorizontalAlignment="Left" Height="230" Margin="448.2,203,0,0" VerticalAlignment="Top" Width="230" Grid.Column="3" Stretch="UniformToFill"/>
+
+        <InkCanvas Grid.Column="3" HorizontalAlignment="Left" Height="230" Margin="447.2,203,0,0" VerticalAlignment="Top" Width="230" Name="paintSurface" MouseDown="Canvas_MouseDown_1" MouseMove="Canvas_MouseMove_1">
+            <InkCanvas.DefaultDrawingAttributes>
+                <DrawingAttributes x:Name="attribute" Width="15" Height="15" Color="Green"/>
+            </InkCanvas.DefaultDrawingAttributes>
+            <InkCanvas.LayoutTransform>
+                <ScaleTransform ScaleX="{Binding ElementName=ZoomSlider,Path=Value}" ScaleY="{Binding ElementName=ZoomSlider,Path=Value}"></ScaleTransform>
+            </InkCanvas.LayoutTransform>
+        </InkCanvas>
     </Grid>
 </Window>

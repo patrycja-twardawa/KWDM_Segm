@@ -18,6 +18,9 @@ using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
 using System.Threading;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Drawing.Imaging;
 
 namespace KWDM_Segm
 {
@@ -46,6 +49,7 @@ namespace KWDM_Segm
         public string actual_img = "1";
         public string actual_instance;
         public string segm_method = "segmCV";
+        System.Windows.Point currentPoint = new System.Windows.Point();
 
         public MainWindow()
         {
@@ -75,6 +79,76 @@ namespace KWDM_Segm
                 else if (list_name == "ListaSerii") { WczytajInstancjeMatlab(list_value); }
                 else { WczytajObrazMatlab(list_string); } //ListaInstancji
             }
+        }
+
+        private void Button_Click_Gumka(object sender, RoutedEventArgs e)
+        {
+            paintSurface.EditingMode = InkCanvasEditingMode.EraseByPoint;
+        }
+
+        private void Button_Click_Pedzel(object sender, RoutedEventArgs e)
+        {
+            paintSurface.EditingMode = InkCanvasEditingMode.Ink;
+        }
+
+        private void Canvas_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+                currentPoint = e.GetPosition(this);
+        }
+
+        private void Canvas_MouseMove_1(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            //if (e.LeftButton == MouseButtonState.Pressed)
+            //{
+            //    Line line = new Line();
+            //    line.Stroke = SystemColors.WindowFrameBrush;
+            //    line.X1 = currentPoint.X;
+            //    line.Y1 = currentPoint.Y;
+            //    line.X2 = e.GetPosition(this).X;
+            //    line.Y2 = e.GetPosition(this).Y;
+            //    currentPoint = e.GetPosition(this);
+            //    paintSurface.Children.Add(line);
+            //}
+        }
+
+        private void Button_Click_Zapisz(object sender, RoutedEventArgs e)
+        {
+            double width = paintSurface.ActualWidth;
+            double height = paintSurface.ActualHeight;
+            RenderTargetBitmap bmpCopied = new RenderTargetBitmap((int)Math.Round(width), (int)Math.Round(height), 96, 96, PixelFormats.Default);
+            DrawingVisual dv = new DrawingVisual();
+
+            using (DrawingContext dc = dv.RenderOpen())
+            {
+                VisualBrush vb = new VisualBrush(paintSurface);
+                dc.DrawRectangle(vb, null, new Rect(new System.Windows.Point(), new System.Windows.Size(width, height)));
+            }
+
+            bmpCopied.Render(dv);
+            System.Drawing.Bitmap bitmap;
+
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                // from System.Media.BitmapImage to System.Drawing.Bitmap 
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create(bmpCopied));
+                enc.Save(outStream);
+                bitmap = new System.Drawing.Bitmap(outStream);
+            }
+
+            EncoderParameter qualityParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 85L);
+            ImageCodecInfo jpegCodec = getEncoderInfo("image/jpeg"); // Jpeg image codec
+
+            if (jpegCodec == null)
+                return;
+
+            EncoderParameters encoderParams = new EncoderParameters(1);
+            encoderParams.Param[0] = qualityParam;
+            System.Drawing.Bitmap btm = new Bitmap(bitmap);
+            bitmap.Dispose();
+            btm.Save(path + "\\wynik.jpg", jpegCodec, encoderParams); //zmieniona ścieżka
+            btm.Dispose();
         }
 
         //FUNKCJE GŁÓWNE - OBSŁUGA ZDARZEŃ -----------------------------------------------------------------------------------------------------------------------------------
@@ -293,6 +367,18 @@ namespace KWDM_Segm
                 temp = temp.Remove(temp.Length - 1);
             }
             return temp;
+        }
+
+        private ImageCodecInfo getEncoderInfo(string mimeType)
+        {
+            // Get image codecs for all image formats
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+
+            // Find the correct image codec
+            for (int i = 0; i < codecs.Length; i++)
+                if (codecs[i].MimeType == mimeType)
+                    return codecs[i];
+            return null;
         }
 
         // FUNKCJE POMOCNICZE DLA MATLABA
