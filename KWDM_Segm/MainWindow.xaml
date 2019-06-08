@@ -44,11 +44,11 @@
 
         <Button Content="AKTUALIZUJ" Name="AktualizujButton" Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="27" Margin="24,493,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Grid.ColumnSpan="2" Background="White"/>
         <Button Content="DODAJ" Name="DodajButton"  Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="27" Margin="24,528,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Grid.ColumnSpan="2" Background="White"/>
-        <Button Content="ZAPISZ WYNIK" Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="27" Margin="24,563,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Grid.ColumnSpan="2" Background="White"/>
+        <Button Content="ZAPISZ WYNIK" Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="27" Margin="24,563,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click_Zapisz" Grid.ColumnSpan="2" Background="White"/>
         <Button Content="Zaloguj się" FontSize="15" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="30" Margin="619.8,10,0,0" VerticalAlignment="Top" Width="91" Click="Button_Click" Background="White" BorderBrush="White"/>
         <Button Content="ZAPISZ" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="26" Margin="596.2,52,0,0" VerticalAlignment="Top" Width="91" Click="Button_Click" Background="White"/>
 
-        <Button Content="J" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="458.2,521,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White"/>
+        <Button Name ="pedzelButton"  Content="J" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="458.2,521,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White"/>
         <Button Content="S" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="495.2,521,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White"/>
         <Button Content="K" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="458.2,558,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White"/>
         <Button Content="L" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="495.2,558,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White"/>
@@ -73,13 +73,11 @@
         <Image Name="ImageO1" Source="Blank.png" HorizontalAlignment="Left" Height="230" Margin="194.2,203,0,0" VerticalAlignment="Top" Width="230" Grid.Column="3" Stretch="UniformToFill"/>
         <Image Name="ImageO2" Source="Blank.png" HorizontalAlignment="Left" Height="230" Margin="448.2,203,0,0" VerticalAlignment="Top" Width="230" Grid.Column="3" Stretch="UniformToFill"/>
 
-        <InkCanvas Grid.Column="3" HorizontalAlignment="Left" Height="230" Margin="447.2,203,0,0" VerticalAlignment="Top" Width="230" Name="paintSurface" MouseDown="Canvas_MouseDown_1" MouseMove="Canvas_MouseMove_1">
+        <InkCanvas  Grid.Column="3" Background ="Transparent" HorizontalAlignment="Left" Height="230" Margin="447.2,203,0,0" VerticalAlignment="Top" Width="230" Name="paintSurface"  MouseDown="Canvas_MouseDown_1" MouseMove="Canvas_MouseMove_1">
             <InkCanvas.DefaultDrawingAttributes>
-                <DrawingAttributes x:Name="attribute" Width="15" Height="15" Color="Green"/>
+                <DrawingAttributes x:Name="attribute" Width="5" Height="5" Color="White"/>
             </InkCanvas.DefaultDrawingAttributes>
-            <InkCanvas.LayoutTransform>
-                <ScaleTransform ScaleX="{Binding ElementName=ZoomSlider,Path=Value}" ScaleY="{Binding ElementName=ZoomSlider,Path=Value}"></ScaleTransform>
-            </InkCanvas.LayoutTransform>
         </InkCanvas>
+        <Button Content ="WYŚLIJ NA SERWER" Name ="SendServer"  Click ="Button_Click" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="24" Margin="24,595,0,0" VerticalAlignment="Top" Width="162"/>
     </Grid>
 </Window>

@@ -1,8 +1,15 @@
-function [reply] = OrthancSend(URL, DICOMfilename)
-%%% w tej wersji funkcji plik DICOM musi byæ w dir, gdzie znajduje siê plik
-%%% .m
-%%% DICOMfilename, np. 'xd.dcm'
-    execute = ['!curl -X POST' URL '/instances --data-binary @' DICOMfilename];
-    reply = evalc(execute);
+function [] = OrthancSend(file_path, segmentation, DICOMfilename)
+    addpath('.\jsonlab');
+    URL = 'http://localhost:8042'; %% adres serwera
+
+    info = dicominfo(fullfile(file_path,DICOMfilename));
+    info.BodyPartExamined = [info.BodyPartExamined ' Segmentacja'];
+    
+    img = imread(fullfile(file_path, segmentation));  
+    dicomwrite(img, fullfile(file_path,[DICOMfilename '_segm.dcm']), info);
+
+    execute = ['!curl -X POST ' URL '/instances --data-binary @' fullfile(file_path,[DICOMfilename '_segm.dcm'])];
+    eval(execute);
 end
+
 

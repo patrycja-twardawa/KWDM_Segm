@@ -118,7 +118,7 @@ function[] = segmentacja(file_path, im_path)
 
     bw = activecontour(im_cropped,co,600,'Chan-Vese','SmoothFactor',0.45,'ContractionBias',0.25); %wczesniej - 0.1 0.5 400
     %figure; imshow(bw)
-    title('Segmented Image - Chan-Vese')
+%     title('Segmented Image - Chan-Vese')
 
     bw2 = activecontour(im_cropped,co,120,'edge','SmoothFactor',0.1,'ContractionBias',0.8); 
    

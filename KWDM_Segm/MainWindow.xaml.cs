@@ -50,10 +50,14 @@ namespace KWDM_Segm
         public string actual_instance;
         public string segm_method = "segmCV";
         System.Windows.Point currentPoint = new System.Windows.Point();
+        public int fl = 0;
+        
 
         public MainWindow()
         {
             InitializeComponent();
+            paintSurface.Visibility = Visibility.Hidden;
+ 
             //OrthStart();
         }
 
@@ -64,6 +68,38 @@ namespace KWDM_Segm
             if (name == "AktualizujButton") { AktualizujMatlab(); } //Proba();
             else if (name == "DodajButton") { Dodaj(); }
             else if (name == "SegmentujButton") { SegmentujMatlab(); }
+            else if (name == "pedzelButton") { Pedzel(); }
+            else if(name == "SendServer") { wyslijDICOM();  }
+        }
+
+        private void Pedzel()
+        {
+            paintSurface.Visibility = Visibility.Visible;
+
+            string file_path = path + "\\temp";
+
+            string file_name = path + "\\temp\\" + "segmCV" + ".png"; //ew. Label.Content = file_name;
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.UriSource = new Uri(file_name);
+            bitmap.EndInit();
+
+            ImageBrush ib = new ImageBrush();
+            ib.ImageSource = bitmap;
+            //ib.ImageSource = new BitmapImage(new Uri("D://KWDM_proj//KWDM_Segm//KWDM_Segm//bin//Debug//ORTHANC//temp//segmCV.png", UriKind.RelativeOrAbsolute));
+            paintSurface.Background = ib;
+
+            /*GC.Collect();
+            DirectoryInfo dir = new DirectoryInfo(path + "\\temp");
+            dir.Refresh();
+
+            string file_name = path + "\\temp\\" + "segmCV" + ".png"; //ew. Label.Content = file_name;
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.UriSource = new Uri(file_name);
+            bitmap.EndInit();*/
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -126,32 +162,33 @@ namespace KWDM_Segm
             }
 
             bmpCopied.Render(dv);
+
             System.Drawing.Bitmap bitmap;
 
-            using (MemoryStream outStream = new MemoryStream())
-            {
-                // from System.Media.BitmapImage to System.Drawing.Bitmap 
-                BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(bmpCopied));
-                enc.Save(outStream);
-                bitmap = new System.Drawing.Bitmap(outStream);
-            }
+             using (MemoryStream outStream = new MemoryStream())
+             {
+                 // from System.Media.BitmapImage to System.Drawing.Bitmap 
+                 BitmapEncoder enc = new BmpBitmapEncoder();
+                 enc.Frames.Add(BitmapFrame.Create(bmpCopied));
+                 enc.Save(outStream);
+                 bitmap = new System.Drawing.Bitmap(outStream);
+             }
 
-            EncoderParameter qualityParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 85L);
-            ImageCodecInfo jpegCodec = getEncoderInfo("image/jpeg"); // Jpeg image codec
+             EncoderParameter qualityParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 85L);
+             ImageCodecInfo jpegCodec = getEncoderInfo("image/png"); // Jpeg image codec
 
-            if (jpegCodec == null)
-                return;
+             if (jpegCodec == null)
+                 return;
 
-            EncoderParameters encoderParams = new EncoderParameters(1);
-            encoderParams.Param[0] = qualityParam;
-            System.Drawing.Bitmap btm = new Bitmap(bitmap);
-            bitmap.Dispose();
-            btm.Save(path + "\\wynik.jpg", jpegCodec, encoderParams); //zmieniona ścieżka
-            btm.Dispose();
+             EncoderParameters encoderParams = new EncoderParameters(1);
+             encoderParams.Param[0] = qualityParam;
+             System.Drawing.Bitmap btm = new Bitmap(bitmap);
+             bitmap.Dispose();
+             btm.Save(path + "\\temp\\segmCV.png", jpegCodec, encoderParams); //zmieniona ścieżka
+             btm.Dispose();
         }
 
-        //FUNKCJE GŁÓWNE - OBSŁUGA ZDARZEŃ -----------------------------------------------------------------------------------------------------------------------------------
+               //FUNKCJE GŁÓWNE - OBSŁUGA ZDARZEŃ -----------------------------------------------------------------------------------------------------------------------------------
 
         // FUNKCJE MATLAB-a
 
@@ -286,6 +323,18 @@ namespace KWDM_Segm
             DispImage(segm_method, lr);
         }
 
+        private void wyslijDICOM()//(file_path, segmentation, DICOMfilename)
+        {
+            string file_path = "segmCV.png";
+            string path_n = path + "\\temp";
+            string im_path = actual_instance + ".dcm"; //+ actual_img + ".png"; //path + "\\temp\\" + actual_img + ".png";
+            object result = null; // wyjście default
+
+            MLApp.MLApp matlab = MatlabInitialize();
+            matlab.Execute(@"cd " + path);
+            matlab.Feval("OrthancSend", 0, out result, path_n, file_path, im_path); //wywołanie funkcji
+        }
+
         // FUNKCJE KONSOLOWE
 
         private void Dodaj()
@@ -334,8 +383,14 @@ namespace KWDM_Segm
 
         private void DispImage(string name_img, int lr)
         {
-            ImageO1.Source = null;
-            ImageO2.Source = null;
+            if (lr == 0)
+            {
+                ImageO1.Source = null;
+            }
+            else if (lr == 1)
+            {
+                ImageO2.Source = null;
+            }
             UpdateLayout();
             GC.Collect();
             DirectoryInfo dir = new DirectoryInfo(path + "\\temp");

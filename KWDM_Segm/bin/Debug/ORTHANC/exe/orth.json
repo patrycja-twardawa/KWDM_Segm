@@ -92,7 +92,7 @@
   "DicomCheckCalledAet" : false,
 
   // The DICOM port
-  "DicomPort" : 4242,
+  "DicomPort" : 4244,
 
   // The default encoding that is assumed for DICOM files without
   // "SpecificCharacterSet" DICOM tag, and that is used when answering
