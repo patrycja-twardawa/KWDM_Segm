@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KWDM_Segm"
         mc:Ignorable="d"
-        Title="Segmentacja Naskórka" Height="657.3" Width="754.4" Background="White" BorderBrush="Azure">
-    <Grid HorizontalAlignment="Left" Width="754" Margin="0,0,-6,-38">
+        Title="Segmentacja Naskórka" Height="670" Width="1100" Background="White" BorderBrush="Azure">
+    <Grid HorizontalAlignment="Left" Width="1100" Margin="0,0,-6,-38">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition Width="0*"/>
@@ -28,10 +28,10 @@
         <Label Content="LISTA INSTANCJI" Grid.Column="2" HorizontalAlignment="Left" Height="30" Margin="24,377,0,0" VerticalAlignment="Top" Width="162" FontSize="15" Grid.ColumnSpan="2"/>
 
         <TextBox Grid.Column="3" HorizontalAlignment="Left" FontSize="15" VerticalContentAlignment="Center" TextAlignment="Right" Height="30" Margin="447.8,10,0,0" TextWrapping="Wrap" Text="Witaj!" VerticalAlignment="Top" Width="152" BorderBrush="White"/>
-        <TextBox Grid.Column="3" HorizontalAlignment="Left" Height="57" Margin="195,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="241"/>
-        <TextBox Grid.Column="3" HorizontalAlignment="Left" Height="57" Margin="446.8,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="240"/>
+        <TextBox Name="infotb" Grid.Column="3" HorizontalAlignment="Left" Height="57" Margin="195,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="241"/>
+        <TextBox Name="notatkitb" Grid.Column="3" HorizontalAlignment="Left" Height="57" Margin="446.8,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="240"/>
 
-        <Border BorderBrush="Black" BorderThickness="1.5" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="1.5" Margin="10,45,0,0" VerticalAlignment="Top" Width="725"/>
+        <Border BorderBrush="Black" BorderThickness="1.5" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="1" Margin="10,45,0,0" VerticalAlignment="Top" Width="1031"/>
         <Border BorderBrush="Black" BorderThickness="0.5" Grid.Column="3" HorizontalAlignment="Left" Height="535" Margin="172.2,71,0,0" VerticalAlignment="Top" Width="1.2"/>
         <Border BorderBrush="Black" BorderThickness="1.5" HorizontalAlignment="Left" Height="2" Margin="187.8,161,0,0" VerticalAlignment="Top" Width="512" Grid.Column="3"/>
         <Border BorderBrush="Black" BorderThickness="1.5" HorizontalAlignment="Left" Height="2" Margin="187.6,469,0,0" VerticalAlignment="Top" Width="512" Grid.Column="3"/>
@@ -46,10 +46,10 @@
         <Button Content="DODAJ" Name="DodajButton"  Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="27" Margin="24,528,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Grid.ColumnSpan="2" Background="White"/>
         <Button Content="ZAPISZ WYNIK" Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="27" Margin="24,563,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click_Zapisz" Grid.ColumnSpan="2" Background="White"/>
         <Button Content="Zaloguj się" FontSize="15" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Height="30" Margin="619.8,10,0,0" VerticalAlignment="Top" Width="91" Click="Button_Click" Background="White" BorderBrush="White"/>
-        <Button Content="ZAPISZ" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="26" Margin="596.2,52,0,0" VerticalAlignment="Top" Width="91" Click="Button_Click" Background="White"/>
+        <Button Name="Raport" Content="Wygenreuj Raport" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="26" Margin="875,572,0,0" VerticalAlignment="Top" Width="118" Click="Button_Click" Background="White"/>
 
-        <Button Name ="pedzelButton"  Content="J" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="458.2,521,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White"/>
-        <Button Content="S" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="495.2,521,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White"/>
+        <Button Name ="pedzelButton"  Content="P" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="458.2,521,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White"/>
+        <Button Content="G" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="495.2,521,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click_Gumka" Background="White"/>
         <Button Content="K" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="458.2,558,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White"/>
         <Button Content="L" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="495.2,558,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White"/>
         <Button Content="SEGMENTUJ" Name="SegmentujButton" FontWeight="Bold" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="549.2,558,0,0" VerticalAlignment="Top" Width="138" Click="Button_Click" Background="White"/>
@@ -79,5 +79,8 @@
             </InkCanvas.DefaultDrawingAttributes>
         </InkCanvas>
         <Button Content ="WYŚLIJ NA SERWER" Name ="SendServer"  Click ="Button_Click" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="24" Margin="24,595,0,0" VerticalAlignment="Top" Width="162"/>
+        <Border BorderBrush="Black" BorderThickness="0.5" Grid.Column="3" HorizontalAlignment="Left" Height="535" Margin="710,71,0,0" VerticalAlignment="Top" Width="1"/>
+        <Label x:Name="label" Content="Wykres intensywności" Grid.Column="3" HorizontalAlignment="Left" Height="62" Margin="716,82,0,0" VerticalAlignment="Top" Width="277"/>
+        <Image x:Name="image" Grid.Column="3" HorizontalAlignment="Left" Height="308" Margin="734,163,0,0" VerticalAlignment="Top" Width="290"/>
     </Grid>
 </Window>
