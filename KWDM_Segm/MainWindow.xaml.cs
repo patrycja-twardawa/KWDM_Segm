@@ -21,6 +21,7 @@ using System.Threading;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
+using Spire.Doc;
 
 namespace KWDM_Segm
 {
@@ -70,6 +71,7 @@ namespace KWDM_Segm
             else if (name == "SegmentujButton") { SegmentujMatlab(); }
             else if (name == "pedzelButton") { Pedzel(); }
             else if(name == "SendServer") { wyslijDICOM();  }
+            else if (name == "Raport") { CreateDocument(); }
         }
 
         private void Pedzel()
@@ -188,7 +190,168 @@ namespace KWDM_Segm
              btm.Dispose();
         }
 
-               //FUNKCJE GŁÓWNE - OBSŁUGA ZDARZEŃ -----------------------------------------------------------------------------------------------------------------------------------
+        private void CreateDocument()
+        {
+            try
+            {
+                //Create New Word
+
+                Document doc = new Document();
+
+                //Add Section
+
+                Spire.Doc.Section section = doc.AddSection();
+
+
+
+                //nagłowek
+                Spire.Doc.Documents.Paragraph para = section.AddParagraph();
+                //set the spacing before and after
+
+
+                para.Format.BeforeAutoSpacing = false;
+                para.Format.BeforeSpacing = 15;
+                para.Format.AfterAutoSpacing = false;
+                para.Format.AfterSpacing = 15;
+
+
+
+
+                //Append Text
+
+                Spire.Doc.Fields.TextRange rangeH = para.AppendText("Raport: program do segmentacji naskórka");
+                rangeH.CharacterFormat.FontSize = 25;
+                rangeH.CharacterFormat.Bold = true;
+
+
+                //Add Paragraph
+
+
+                Spire.Doc.Documents.Paragraph Para = section.AddParagraph();
+                //set the spacing before and after
+                Para.Format.BeforeAutoSpacing = false;
+                Para.Format.BeforeSpacing = 15;
+                Para.Format.AfterAutoSpacing = false;
+                Para.Format.AfterSpacing = 15;
+
+                //Append Text
+
+                Spire.Doc.Fields.TextRange range = Para.AppendText("1. Obraz naskórka przed segmentacją ");
+                range.CharacterFormat.FontSize = 20;
+                range.CharacterFormat.Bold = true;
+
+                // Obrazek przed segmentacją 
+
+                Spire.Doc.Documents.Paragraph Imageparagraph = section.AddParagraph();
+                System.Drawing.Image image = System.Drawing.Image.FromFile(@"C:\Users\Piotr Jarząbek\Desktop\KWDM_Segm-master\KWDM_Segm\Images\nell.png");
+                Spire.Doc.Fields.DocPicture picture = Imageparagraph.AppendPicture(image);
+                //Set Image
+                picture.Height = 320;
+                picture.Width = 320;
+
+
+                // obrazek po segmentacji 
+
+                Spire.Doc.Documents.Paragraph Para1 = section.AddParagraph();
+                Para1.Format.BeforeAutoSpacing = false;
+                Para1.Format.BeforeSpacing = 15;
+                Para1.Format.AfterAutoSpacing = false;
+                Para1.Format.AfterSpacing = 15;
+                Spire.Doc.Fields.TextRange range1 = Para1.AppendText("2. Obraz naskórka po segmentacji ");
+                range1.CharacterFormat.FontSize = 20;
+                range1.CharacterFormat.Bold = true;
+
+
+
+                Spire.Doc.Documents.Paragraph Imageparagraph1 = section.AddParagraph();
+                System.Drawing.Image image1 = System.Drawing.Image.FromFile(@"C:\Users\Piotr Jarząbek\Desktop\KWDM_Segm-master\KWDM_Segm\Images\sponge.png");
+                Spire.Doc.Fields.DocPicture picture1 = Imageparagraph1.AppendPicture(image1);
+                //Set Image
+                picture1.Height = 300;
+                picture1.Width = 320;
+               
+
+
+                //wykres intensywności
+
+                Spire.Doc.Documents.Paragraph Para2 = section.AddParagraph();
+                Para2.Format.BeforeAutoSpacing = false;
+                Para2.Format.BeforeSpacing = 15;
+                Para2.Format.AfterAutoSpacing = false;
+                Para2.Format.AfterSpacing = 15;
+
+
+                Spire.Doc.Fields.TextRange range2 = Para2.AppendText("3. Wykres intensywności ");
+                range2.CharacterFormat.FontSize = 20;
+                range2.CharacterFormat.Bold = true;
+
+
+
+                Spire.Doc.Documents.Paragraph Imageparagraph2 = section.AddParagraph();
+                System.Drawing.Image image2 = System.Drawing.Image.FromFile(@"C:\Users\Piotr Jarząbek\Desktop\KWDM_Segm-master\KWDM_Segm\Images\spongebob.jpg");
+                Spire.Doc.Fields.DocPicture picture2 = Imageparagraph2.AppendPicture(image2);
+                //Set Image
+                picture2.Height = 320;
+                picture2.Width = 320;
+
+
+
+                // Notatki 
+
+
+                Spire.Doc.Documents.Paragraph Para3 = section.AddParagraph();
+                Para3.Format.BeforeAutoSpacing = false;
+                Para3.Format.BeforeSpacing = 15;
+                Para3.Format.AfterAutoSpacing = false;
+                Para3.Format.AfterSpacing = 15;
+
+                Spire.Doc.Fields.TextRange range3 = Para3.AppendText("3. Notatki ");
+                range3.CharacterFormat.FontSize = 20;
+                range3.CharacterFormat.Bold = true;
+
+                Spire.Doc.Documents.Paragraph ParaNotatki = section.AddParagraph();
+                Spire.Doc.Fields.TextRange rangeNotatki = ParaNotatki.AppendText(Environment.NewLine + notatkitb.Text);
+                rangeNotatki.CharacterFormat.FontSize = 10;
+
+
+
+                // informacje dodatkowe
+
+
+                Spire.Doc.Documents.Paragraph Para5 = section.AddParagraph();
+                Para5.Format.BeforeAutoSpacing = false;
+                Para5.Format.BeforeSpacing = 15;
+                Para5.Format.AfterAutoSpacing = false;
+                Para5.Format.AfterSpacing = 15;
+
+
+                Spire.Doc.Fields.TextRange range4 = Para5.AppendText("4. Informacje Dodatkowe ");
+                range4.CharacterFormat.FontSize = 20;
+                range4.CharacterFormat.Bold = true;
+
+                Spire.Doc.Documents.Paragraph ParaInfo = section.AddParagraph();
+                Spire.Doc.Fields.TextRange rangeInfo = ParaInfo.AppendText(Environment.NewLine + infotb.Text);
+                rangeInfo.CharacterFormat.FontSize = 10;
+
+                //Save and launch
+
+                //doc.SaveToFile(@"d:\\MyWord.docx", Spire.Doc.FileFormat.Docx);
+                doc.SaveToFile(@"d:\\MyPDF.pdf", FileFormat.PDF);
+
+
+
+
+
+
+                MessageBox.Show("Document created successfully !");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        //FUNKCJE GŁÓWNE - OBSŁUGA ZDARZEŃ -----------------------------------------------------------------------------------------------------------------------------------
 
         // FUNKCJE MATLAB-a
 
