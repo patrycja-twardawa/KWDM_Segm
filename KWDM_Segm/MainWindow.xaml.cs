@@ -1,27 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
-using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
-using System.Threading;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Drawing.Imaging;
 using Spire.Doc;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace KWDM_Segm
 {
@@ -46,6 +38,7 @@ namespace KWDM_Segm
         public List<string> lista_id;
         public List<string> lista_serii;
         public string badanie;
+        public string info;
         public string path = System.AppDomain.CurrentDomain.BaseDirectory + "ORTHANC";
         public string actual_img = "1";
         public string actual_instance;
@@ -64,7 +57,7 @@ namespace KWDM_Segm
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string name = (sender as Button).Name.ToString();
+            string name = (sender as System.Windows.Controls.Button).Name.ToString();
 
             if (name == "AktualizujButton") { AktualizujMatlab(); } //Proba();
             else if (name == "DodajButton") { Dodaj(); }
@@ -106,11 +99,11 @@ namespace KWDM_Segm
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string list_value = (sender as ListBox).SelectedIndex.ToString();
+            string list_value = (sender as System.Windows.Controls.ListBox).SelectedIndex.ToString();
             if (int.Parse(list_value) != -1)
             {
-                string list_string = (sender as ListBox).SelectedValue.ToString();
-                string list_name = (sender as ListBox).Name.ToString();
+                string list_string = (sender as System.Windows.Controls.ListBox).SelectedValue.ToString();
+                string list_name = (sender as System.Windows.Controls.ListBox).Name.ToString();
 
                 if (list_name == "ListaPacjentow") { WczytajBadaniaMatlab(list_value); }
                 else if (list_name == "ListaBadan") { WczytajSerieMatlab(list_string); }
@@ -186,73 +179,58 @@ namespace KWDM_Segm
              encoderParams.Param[0] = qualityParam;
              System.Drawing.Bitmap btm = new Bitmap(bitmap);
              bitmap.Dispose();
-             btm.Save(path + "\\temp\\segmCV.png", jpegCodec, encoderParams); //zmieniona ścieżka
-             btm.Dispose();
+
+            string path_save = null;
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    path_save = fbd.SelectedPath;
+                    btm.Save(fbd.SelectedPath + "\\Wynik-Segmentacja.png", jpegCodec, encoderParams); //zmieniona ścieżka
+                    System.Windows.MessageBox.Show("Obraz zapisany poprawnie (Wynik-Segmentacja.png)!", "Zapis wyniku segmentacji");
+                }
+            }
+
+            btm.Dispose();
         }
 
         private void CreateDocument()
         {
             try
             {
-                //Create New Word
+                Document doc = new Document(); //tworzenie nowego dokumentu Word
+                Spire.Doc.Section section = doc.AddSection(); //dodawanie nowej sekcji
+                Spire.Doc.Documents.Paragraph para = section.AddParagraph(); //nagłówek
 
-                Document doc = new Document();
-
-                //Add Section
-
-                Spire.Doc.Section section = doc.AddSection();
-
-
-
-                //nagłowek
-                Spire.Doc.Documents.Paragraph para = section.AddParagraph();
-                //set the spacing before and after
-
-
-                para.Format.BeforeAutoSpacing = false;
+                para.Format.BeforeAutoSpacing = false; //spacing przed i po
                 para.Format.BeforeSpacing = 15;
                 para.Format.AfterAutoSpacing = false;
                 para.Format.AfterSpacing = 15;
 
-
-
-
-                //Append Text
-
-                Spire.Doc.Fields.TextRange rangeH = para.AppendText("Raport: program do segmentacji naskórka");
+                Spire.Doc.Fields.TextRange rangeH = para.AppendText("Raport: program do segmentacji naskórka"); //dołączenie tekstu
                 rangeH.CharacterFormat.FontSize = 25;
                 rangeH.CharacterFormat.Bold = true;
 
+                Spire.Doc.Documents.Paragraph Para = section.AddParagraph(); //dodanie paragrafu
 
-                //Add Paragraph
-
-
-                Spire.Doc.Documents.Paragraph Para = section.AddParagraph();
-                //set the spacing before and after
-                Para.Format.BeforeAutoSpacing = false;
+                Para.Format.BeforeAutoSpacing = false; //spacing
                 Para.Format.BeforeSpacing = 15;
                 Para.Format.AfterAutoSpacing = false;
                 Para.Format.AfterSpacing = 15;
 
-                //Append Text
-
-                Spire.Doc.Fields.TextRange range = Para.AppendText("1. Obraz naskórka przed segmentacją ");
+                Spire.Doc.Fields.TextRange range = Para.AppendText("1. Obraz naskórka przed segmentacją");
                 range.CharacterFormat.FontSize = 20;
                 range.CharacterFormat.Bold = true;
 
-                // Obrazek przed segmentacją 
-
-                Spire.Doc.Documents.Paragraph Imageparagraph = section.AddParagraph();
-                System.Drawing.Image image = System.Drawing.Image.FromFile(@"C:\Users\Piotr Jarząbek\Desktop\KWDM_Segm-master\KWDM_Segm\Images\nell.png");
+                Spire.Doc.Documents.Paragraph Imageparagraph = section.AddParagraph(); //obrazek przed segmentacją 
+                System.Drawing.Image image = System.Drawing.Image.FromFile(path + "\\temp\\" + actual_img + ".png");
                 Spire.Doc.Fields.DocPicture picture = Imageparagraph.AppendPicture(image);
-                //Set Image
                 picture.Height = 320;
                 picture.Width = 320;
+                Imageparagraph.Format.HorizontalAlignment = Spire.Doc.Documents.HorizontalAlignment.Center;
 
-
-                // obrazek po segmentacji 
-
-                Spire.Doc.Documents.Paragraph Para1 = section.AddParagraph();
+                Spire.Doc.Documents.Paragraph Para1 = section.AddParagraph(); //obrazek po segmentacji 
                 Para1.Format.BeforeAutoSpacing = false;
                 Para1.Format.BeforeSpacing = 15;
                 Para1.Format.AfterAutoSpacing = false;
@@ -261,51 +239,54 @@ namespace KWDM_Segm
                 range1.CharacterFormat.FontSize = 20;
                 range1.CharacterFormat.Bold = true;
 
-
-
                 Spire.Doc.Documents.Paragraph Imageparagraph1 = section.AddParagraph();
-                System.Drawing.Image image1 = System.Drawing.Image.FromFile(@"C:\Users\Piotr Jarząbek\Desktop\KWDM_Segm-master\KWDM_Segm\Images\sponge.png");
+                System.Drawing.Image image1 = System.Drawing.Image.FromFile(path + "\\temp\\" + segm_method + ".png");
                 Spire.Doc.Fields.DocPicture picture1 = Imageparagraph1.AppendPicture(image1);
-                //Set Image
                 picture1.Height = 300;
                 picture1.Width = 320;
-               
+                Imageparagraph1.Format.HorizontalAlignment = Spire.Doc.Documents.HorizontalAlignment.Center;
 
-
-                //wykres intensywności
-
-                Spire.Doc.Documents.Paragraph Para2 = section.AddParagraph();
+                Spire.Doc.Documents.Paragraph Para2 = section.AddParagraph(); //wykres intensywności
                 Para2.Format.BeforeAutoSpacing = false;
                 Para2.Format.BeforeSpacing = 15;
                 Para2.Format.AfterAutoSpacing = false;
                 Para2.Format.AfterSpacing = 15;
 
-
-                Spire.Doc.Fields.TextRange range2 = Para2.AppendText("3. Wykres intensywności ");
+                Spire.Doc.Fields.TextRange range2 = Para2.AppendText("3. Wykres intensywności");
                 range2.CharacterFormat.FontSize = 20;
                 range2.CharacterFormat.Bold = true;
 
-
-
                 Spire.Doc.Documents.Paragraph Imageparagraph2 = section.AddParagraph();
-                System.Drawing.Image image2 = System.Drawing.Image.FromFile(@"C:\Users\Piotr Jarząbek\Desktop\KWDM_Segm-master\KWDM_Segm\Images\spongebob.jpg");
+                System.Drawing.Image image2 = System.Drawing.Image.FromFile(path + "\\temp\\Histogram.png");
                 Spire.Doc.Fields.DocPicture picture2 = Imageparagraph2.AppendPicture(image2);
-                //Set Image
                 picture2.Height = 320;
                 picture2.Width = 320;
+                Imageparagraph2.Format.HorizontalAlignment = Spire.Doc.Documents.HorizontalAlignment.Center;
 
+                Spire.Doc.Fields.TextRange range22 = Para2.AppendText("\nOś pozioma - intensywność pikseli; oś pionowa - ilość pikseli.");
+                range22.CharacterFormat.FontSize = 10;
 
+                Spire.Doc.Documents.Paragraph Para30 = section.AddParagraph(); //informacje o obrazie
+                Para30.Format.BeforeAutoSpacing = false;
+                Para30.Format.BeforeSpacing = 15;
+                Para30.Format.AfterAutoSpacing = false;
+                Para30.Format.AfterSpacing = 15;
 
-                // Notatki 
+                Spire.Doc.Fields.TextRange range30 = Para30.AppendText("4. Informacje o obrazie");
+                range30.CharacterFormat.FontSize = 20;
+                range30.CharacterFormat.Bold = true;
 
+                Spire.Doc.Documents.Paragraph ParaInfo = section.AddParagraph();
+                Spire.Doc.Fields.TextRange rangeInfo = ParaInfo.AppendText(Environment.NewLine + info);
+                rangeInfo.CharacterFormat.FontSize = 10;
 
-                Spire.Doc.Documents.Paragraph Para3 = section.AddParagraph();
+                Spire.Doc.Documents.Paragraph Para3 = section.AddParagraph(); //notatki 
                 Para3.Format.BeforeAutoSpacing = false;
                 Para3.Format.BeforeSpacing = 15;
                 Para3.Format.AfterAutoSpacing = false;
                 Para3.Format.AfterSpacing = 15;
 
-                Spire.Doc.Fields.TextRange range3 = Para3.AppendText("3. Notatki ");
+                Spire.Doc.Fields.TextRange range3 = Para3.AppendText("4. Notatki");
                 range3.CharacterFormat.FontSize = 20;
                 range3.CharacterFormat.Bold = true;
 
@@ -313,41 +294,37 @@ namespace KWDM_Segm
                 Spire.Doc.Fields.TextRange rangeNotatki = ParaNotatki.AppendText(Environment.NewLine + notatkitb.Text);
                 rangeNotatki.CharacterFormat.FontSize = 10;
 
-
-
-                // informacje dodatkowe
-
-
-                Spire.Doc.Documents.Paragraph Para5 = section.AddParagraph();
+                Spire.Doc.Documents.Paragraph Para5 = section.AddParagraph(); //informacje dodatkowe
                 Para5.Format.BeforeAutoSpacing = false;
                 Para5.Format.BeforeSpacing = 15;
                 Para5.Format.AfterAutoSpacing = false;
                 Para5.Format.AfterSpacing = 15;
 
-
-                Spire.Doc.Fields.TextRange range4 = Para5.AppendText("4. Informacje Dodatkowe ");
+                Spire.Doc.Fields.TextRange range4 = Para5.AppendText("5. Informacje Dodatkowe ");
                 range4.CharacterFormat.FontSize = 20;
                 range4.CharacterFormat.Bold = true;
 
-                Spire.Doc.Documents.Paragraph ParaInfo = section.AddParagraph();
-                Spire.Doc.Fields.TextRange rangeInfo = ParaInfo.AppendText(Environment.NewLine + infotb.Text);
-                rangeInfo.CharacterFormat.FontSize = 10;
+                Spire.Doc.Documents.Paragraph ParaInfo2 = section.AddParagraph();
+                Spire.Doc.Fields.TextRange rangeInfo2 = ParaInfo2.AppendText(Environment.NewLine + infotb.Text);
+                rangeInfo2.CharacterFormat.FontSize = 10;
 
-                //Save and launch
+                string path_save = null;
+                using (var fbd = new FolderBrowserDialog())
+                {
+                    DialogResult result = fbd.ShowDialog();
+                    if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                    {
+                        path_save = fbd.SelectedPath;
+                    }
+                }
 
                 //doc.SaveToFile(@"d:\\MyWord.docx", Spire.Doc.FileFormat.Docx);
-                doc.SaveToFile(@"d:\\MyPDF.pdf", FileFormat.PDF);
-
-
-
-
-
-
-                MessageBox.Show("Document created successfully !");
+                doc.SaveToFile(path_save + "\\Raport-Segmentacja.pdf", FileFormat.PDF); //zapis i uruchomienie
+                System.Windows.MessageBox.Show("Dokument utworzony poprawnie (Raport-Segmentacja.pdf)!", "Raport PDF");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                System.Windows.MessageBox.Show(ex.Message);
             }
         }
 
@@ -372,12 +349,20 @@ namespace KWDM_Segm
             lista_pacjentow = new List<string>(Regex.Split(wynik, "\n")); 
             lista_id = new List<string>(Regex.Split(res[1].ToString(), "\n"));
 
+            info = "Brak danych.";
+            DaneObrazoweLabel.Content = "Brak danych.";
             ListaPacjentow.ItemsSource = lista_pacjentow;
             ListaBadan.ItemsSource = null;
             ListaSerii.ItemsSource = null;
             ListaInstancji.ItemsSource = null;
             ImageO1.Source = null;
             ImageO2.Source = null;
+            image.Source = null;
+            IntensywnoscLabel.Visibility = Visibility.Hidden;
+            IloscLabel.Visibility = Visibility.Hidden;
+            ZapiszButton.IsEnabled = false;
+            Raport.IsEnabled = false;
+            SendServer.IsEnabled = false;
         }
 
         private void WczytajBadaniaMatlab(string list_val_pacjid)
@@ -396,11 +381,19 @@ namespace KWDM_Segm
             res[0] = RemoveLastEscape(res[0].ToString());
             List<string> lista_badan = new List<string>(Regex.Split(res[0].ToString(), "\n"));
 
+            info = "Brak danych.";
+            DaneObrazoweLabel.Content = "Brak danych.";
             ListaBadan.ItemsSource = lista_badan;
             ListaSerii.ItemsSource = null;
             ListaInstancji.ItemsSource = null;
             ImageO1.Source = null;
             ImageO2.Source = null;
+            image.Source = null;
+            IntensywnoscLabel.Visibility = Visibility.Hidden;
+            IloscLabel.Visibility = Visibility.Hidden;
+            ZapiszButton.IsEnabled = false;
+            Raport.IsEnabled = false;
+            SendServer.IsEnabled = false;
         }
 
         private void WczytajSerieMatlab(string list_string)
@@ -418,10 +411,18 @@ namespace KWDM_Segm
             res[0] = RemoveLastEscape(res[0].ToString());
             lista_serii = new List<string>(Regex.Split(res[0].ToString(), "\n"));
 
+            info = "Brak danych.";
+            DaneObrazoweLabel.Content = "Brak danych.";
             ListaSerii.ItemsSource = lista_serii;
             ListaInstancji.ItemsSource = null;
             ImageO1.Source = null;
             ImageO2.Source = null;
+            image.Source = null;
+            IntensywnoscLabel.Visibility = Visibility.Hidden;
+            IloscLabel.Visibility = Visibility.Hidden;
+            ZapiszButton.IsEnabled = false;
+            Raport.IsEnabled = false;
+            SendServer.IsEnabled = false;
         }
 
         private void WczytajInstancjeMatlab(string list_val_studyid)
@@ -431,16 +432,26 @@ namespace KWDM_Segm
 
             matlab.Execute(@"cd " + path);
             object result = null; // wyjście default
-            matlab.Feval("OrthInstances", 1, out result, badanie, int.Parse(list_val_studyid) + 1); //wywołanie funkcji
+            matlab.Feval("OrthInstances", 2, out result, badanie, int.Parse(list_val_studyid) + 1); //wywołanie funkcji
             object[] res = result as object[];
             OrthStop();
 
             res[0] = RemoveLastEscape(res[0].ToString());
             List<string> lista_instancji = new List<string>(Regex.Split(res[0].ToString(), "\n"));
 
+            info = Regex.Replace(res[1].ToString(), @"[_]", string.Empty); //jak w pacjentach
+            info = RemoveLastEscape(info);
+            DaneObrazoweLabel.Content = info;
+
             ListaInstancji.ItemsSource = lista_instancji;
             ImageO1.Source = null;
             ImageO2.Source = null;
+            image.Source = null;
+            IntensywnoscLabel.Visibility = Visibility.Hidden;
+            IloscLabel.Visibility = Visibility.Hidden;
+            ZapiszButton.IsEnabled = false;
+            Raport.IsEnabled = false;
+            SendServer.IsEnabled = false;
         }
 
         private void WczytajObrazMatlab(string list_string)
@@ -468,8 +479,13 @@ namespace KWDM_Segm
             //t.Wait();
             //t.Dispose();
 
-            int lr = 0; //2 okna
-            DispImage(actual_img, lr);
+            DispImage(actual_img, 0); //wyświetlenie obrazu oryginalnego
+            image.Source = null;
+            IntensywnoscLabel.Visibility = Visibility.Hidden;
+            IloscLabel.Visibility = Visibility.Hidden;
+            ZapiszButton.IsEnabled = false;
+            Raport.IsEnabled = false;
+            SendServer.IsEnabled = false;
         }
 
         public void SegmentujMatlab()
@@ -478,12 +494,41 @@ namespace KWDM_Segm
             string im_path = "\\" + actual_instance + ".dcm"; //+ actual_img + ".png"; //path + "\\temp\\" + actual_img + ".png";
             object result = null; // wyjście default
 
+            AktualizujButton.IsEnabled = false;
+            DodajButton.IsEnabled = false;
+            ListaPacjentow.IsEnabled = false;
+            ListaBadan.IsEnabled = false;
+            ListaSerii.IsEnabled = false;
+            ListaInstancji.IsEnabled = false;
+            pedzelButton.IsEnabled = false;
+            GumkaButton.IsEnabled = false;
+            LinijkaButton.IsEnabled = false;
+            LupaButton.IsEnabled = false;
+            SegmentujButton.IsEnabled = false;
+            Thread.Sleep(100);
+
             MLApp.MLApp matlab = MatlabInitialize();
             matlab.Execute(@"cd " + path);
             matlab.Feval("segmentacja", 0, out result, file_path, im_path); //wywołanie funkcji
 
-            int lr = 1; //prawe okno
-            DispImage(segm_method, lr);
+            DispImage(segm_method, 1);
+            DispImage("Histogram", 2);
+            IntensywnoscLabel.Visibility = Visibility.Visible;
+            IloscLabel.Visibility = Visibility.Visible;
+            ZapiszButton.IsEnabled = true;
+            Raport.IsEnabled = true;
+            SendServer.IsEnabled = true;
+            AktualizujButton.IsEnabled = true;
+            DodajButton.IsEnabled = true;
+            ListaPacjentow.IsEnabled = true;
+            ListaBadan.IsEnabled = true;
+            ListaSerii.IsEnabled = true;
+            ListaInstancji.IsEnabled = true;
+            pedzelButton.IsEnabled = true;
+            GumkaButton.IsEnabled = true;
+            LinijkaButton.IsEnabled = true;
+            LupaButton.IsEnabled = true;
+            SegmentujButton.IsEnabled = true;
         }
 
         private void wyslijDICOM()//(file_path, segmentation, DICOMfilename)
@@ -502,7 +547,7 @@ namespace KWDM_Segm
 
         private void Dodaj()
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            Microsoft.Win32.OpenFileDialog openFileDialog1 = new Microsoft.Win32.OpenFileDialog();
             string selectedFileName = null;
 
             openFileDialog1.InitialDirectory = "c:\\";
@@ -535,25 +580,30 @@ namespace KWDM_Segm
         private void OrthStart()
         {
             string strCmdText = "/c cd ORTHANC\\exe && Orthanc.exe orth.json";
-            p = System.Diagnostics.Process.Start("CMD.exe", strCmdText);
+            System.Diagnostics.ProcessStartInfo procStartInfo = new System.Diagnostics.ProcessStartInfo("CMD.exe", strCmdText);
+
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
+            procStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+            p = new System.Diagnostics.Process();
+            p.StartInfo = procStartInfo;
+            p.Start(); //p = System.Diagnostics.Process.Start("CMD.exe", strCmdText); //widoczna konsola
         }
 
         private void OrthStop()
         {
-            p.CloseMainWindow();
+            //p.CloseMainWindow();
             p.Close();
         }
 
         private void DispImage(string name_img, int lr)
         {
-            if (lr == 0)
-            {
-                ImageO1.Source = null;
-            }
-            else if (lr == 1)
-            {
-                ImageO2.Source = null;
-            }
+            if (lr == 0) { ImageO1.Source = null; }
+            else if (lr == 1) { ImageO2.Source = null; }
+            else { image.Source = null; } //lr = 2
+
             UpdateLayout();
             GC.Collect();
             DirectoryInfo dir = new DirectoryInfo(path + "\\temp");
@@ -568,11 +618,7 @@ namespace KWDM_Segm
 
             if (lr == 0) { ImageO1.Source = bitmap; }
             else if (lr == 1) { ImageO2.Source = bitmap; }
-            else
-            {
-                ImageO1.Source = bitmap;
-                ImageO2.Source = bitmap;
-            }
+            else { image.Source = bitmap; }
 
             //ImageO1.Refresh();
             //ImageO2.Refresh();
@@ -651,7 +697,7 @@ namespace KWDM_Segm
          string result;
          if (o.ExitCode == 0) { result = "Mały krok dla DICOMa, wielki skok dla studenta. :)"; }
          else { result = "Vanitas vanitatum et omnia vanitas. Kod: " + o.ExitCode.ToString() + ". :("; }
-         MessageBox.Show(result, "Operacja na serwerze DICOM - wynik");
+            System.Windows.MessageBox.Show(result, "Operacja na serwerze DICOM - wynik");
         }
 
         private void Proba()
@@ -686,7 +732,7 @@ namespace KWDM_Segm
 
         private void DodajMatlab()
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            Microsoft.Win32.OpenFileDialog openFileDialog1 = new Microsoft.Win32.OpenFileDialog();
             string selectedFileName = null;
 
             openFileDialog1.InitialDirectory = "c:\\";
@@ -705,7 +751,7 @@ namespace KWDM_Segm
                 OrthStart();
                 string reply = MatlabExecuteSend(URL, selectedFileName);
                 OrthStop();
-                MessageBox.Show(reply, "Wysyłanie plików na serwer DICOM - log");
+                System.Windows.MessageBox.Show(reply, "Wysyłanie plików na serwer DICOM - log");
             }
         }
     }
