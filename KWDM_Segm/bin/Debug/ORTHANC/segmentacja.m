@@ -35,6 +35,7 @@ function[] = segmentacja(file_path, im_path)
     end
 
     %% maksima lokalne 
+    
     win_xcount = size(win_means,1);
     max_loc = cell(win_xcount,1);
 
@@ -46,6 +47,7 @@ function[] = segmentacja(file_path, im_path)
     end
 
     %% cell na pojedynczy wektor, wyszukiwanie okien z krawêdziami
+    
     [size1 size2] = size(max_loc);
     cells_size = 0;
 
@@ -58,6 +60,7 @@ function[] = segmentacja(file_path, im_path)
     end
 
     %% oddzielanie membrany od naskórka + pozycja naskórka do maski
+    
     %opcja : wyci¹gn¹c z max_loca index okna >18 (zmienna index) dla ka¿dego z
     %wektorów, potem pomno¿yæ *20 index w x,y oraz ustawiæ jako punkty do
     %startowego konturu
@@ -95,8 +98,6 @@ function[] = segmentacja(file_path, im_path)
     co = zeros(crop1,crop2);
     for r = 1:(size(max_loc,1))
         if(r == 1)
-            
-            % nie mo¿e byæ zerem, bo mu ryje banie
             if(mask(r,1) == 0)
                 mask(r,1)= 1;
             end
@@ -116,28 +117,35 @@ function[] = segmentacja(file_path, im_path)
     
     %% aktywne kontury
 
-    bw = activecontour(im_cropped,co,600,'Chan-Vese','SmoothFactor',0.45,'ContractionBias',0.25); %wczesniej - 0.1 0.5 400
-    %figure; imshow(bw)
-%     title('Segmented Image - Chan-Vese')
+    bw = activecontour(im_cropped,co,600,'Chan-Vese','SmoothFactor',0.1,'ContractionBias',0.3); %wczesniej - 0.1 0.5 400
 
-    bw2 = activecontour(im_cropped,co,120,'edge','SmoothFactor',0.1,'ContractionBias',0.8); 
-   
-    H = [0 0 1 0 0;
-         0 0 1 0 0;
-         1 1 1 1 1;
-         0 0 1 0 0;
-         0 0 1 0 0];
-
-    bw_final = imopen(bw, strel('arbitrary', H));
-    %figure; imshow(bw_final,[])
+    img_cropped = img(1:crop1,1:crop2);
+    mask = uint8(bw);
     
-%      imwrite(bw_final, strcat(file_path, 'segmCV', '.png'), 'png');
-%      imwrite(bw2, strcat(file_path, 'segmEDGE', '.png'), 'png');
+    %% histogram
+    
+    [rows, columns] = size(co);
+    deltaX = 20; % DO USTAWIENIA - PRZESUNIÊCIE X
+    deltaY = 0; % DO USTAWIENIA - PRZESUNIÊCIE Y
+    D = zeros(rows, columns, 2);
+    D(:,:,1) = -deltaX; 
+    D(:,:,2) = -deltaY;
+    warpedImage = imwarp(co, D);
+
+    %% obwiednia
+    
+    im_mask = mask.*im_cropped;
+    im_mask2= im_mask(im_mask~=0);
+
+    f = figure('visible', 'off');
+    xlabel = 'Intensywnoœæ pikseli';
+    ylabel = 'Iloœæ pikseli';
+    title = 'Histogram obrazu maski';
+    h2=histfit(double(im_mask2),50,'nakagami');
      
-     % zapis do DICOM na serwer
+    %% zapis
      
-     imwrite(bw, strcat(file_path, '\segmCV', '.png'), 'png');
-     imwrite(bw2, strcat(file_path, '\segmEDGE', '.png'), 'png');
-     dicomwrite(bw_final, [file_path '\segm.dcm']);
-     %dicomwrite(bw_final, [file_path(1:end-4) '_segm.dcm']);
+    saveas(f, fullfile(file_path, 'Histogram.png'), 'png');
+    imwrite(bw, strcat(file_path, '\segmCV', '.png'), 'png');
+    
 end
