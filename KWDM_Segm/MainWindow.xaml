@@ -56,7 +56,7 @@
 
         <Button Content="AKTUALIZUJ" Name="AktualizujButton" Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="37" Margin="24,462,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Grid.ColumnSpan="2" Background="White"/>
         <Button Content="DODAJ PACJENTA" Name="DodajButton"  Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="37" Margin="24,507,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Grid.ColumnSpan="2" Background="White"/>
-        <Button Content="ZAPISZ NA DYSKU" Name="ZapiszButton" IsEnabled="False" Grid.Column="3" FontSize="10" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="22" Margin="446.6,442,0,0" VerticalAlignment="Top" Width="110" Click="Button_Click_Zapisz" Background="White"/>
+        <Button Content="ZAPISZ NA DYSKU" Name="ZapiszButton" IsEnabled="False" Grid.Column="3" FontSize="10" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="22" Margin="446.6,454,0,0" VerticalAlignment="Top" Width="110" Click="Button_Click_Zapisz" Background="White"/>
         <Button Name="Raport" Content="WYGENERUJ RAPORT" IsEnabled="false" Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="37" Margin="25,552,0,0" VerticalAlignment="Top" Width="161" Click="Button_Click" Background="White" Grid.ColumnSpan="2"/>
 
         <Button Name ="pedzelButton" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="731,521,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White">
@@ -72,7 +72,7 @@
             <Image VerticalAlignment="Center" HorizontalAlignment="Center" Source="Images/Lupa.png" Height="30" Width="30" IsEnabled="True"/>
         </Button>
         <Button Content="SEGMENTUJ" Name="SegmentujButton" FontSize="15" FontWeight="Bold" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="68.9" Margin="814,521,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Background="White"/>
-        <Button Content ="WYŚLIJ NA SERWER" IsEnabled="False" Name ="SendServer" FontSize="10" Click ="Button_Click" HorizontalAlignment="Left" Height="22" Margin="568,442,0,0" VerticalAlignment="Top" Width="110" Background="White" Grid.Column="3"/>
+        <Button Content ="WYŚLIJ NA SERWER" IsEnabled="False" Name ="SendServer" FontSize="10" Click ="Button_Click" HorizontalAlignment="Left" Height="22" Margin="567.6,454,0,0" VerticalAlignment="Top" Width="110" Background="White" Grid.Column="3"/>
 
         <Image Name="ImageO1" Source="Images/Blank.png" HorizontalAlignment="Left" Height="230" Margin="194.2,203,0,0" VerticalAlignment="Top" Width="230" Grid.Column="3" Stretch="UniformToFill"/>
         <Image Name="ImageO2" Source="Images/Blank.png" HorizontalAlignment="Left" Height="230" Margin="448.2,203,0,0" VerticalAlignment="Top" Width="230" Grid.Column="3" Stretch="UniformToFill"/>
@@ -83,5 +83,6 @@
                 <DrawingAttributes x:Name="attribute" Width="5" Height="5" Color="White"/>
             </InkCanvas.DefaultDrawingAttributes>
         </InkCanvas>
+        <CheckBox Name ="overlayImg" Content="Nałóż maskę na obraz" Grid.Column="3" HorizontalAlignment="Left" Margin="446.6,435,0,0" VerticalAlignment="Top" Checked="OverlayImg_Checked" Unchecked="OverlayImg_Unchecked"/>
     </Grid>
 </Window>

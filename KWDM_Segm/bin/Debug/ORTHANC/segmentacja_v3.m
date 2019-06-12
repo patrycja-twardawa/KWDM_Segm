@@ -191,7 +191,7 @@ im_mask2= im_mask(im_mask~=0);
 
 h2=histfit(double(im_mask2),50,'nakagami');
 xlabel = 'Intensywnoœæ pikseli';
-ylabel = 'Iloœæ pikseli';
+ylabel = 'Liczba pikseli';
 title = 'Histogram obrazu maski';
 
 %% druga segmentacja, bo czemu nie

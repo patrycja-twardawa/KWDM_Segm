@@ -537,10 +537,13 @@ namespace KWDM_Segm
             string path_n = path + "\\temp";
             string im_path = actual_instance + ".dcm"; //+ actual_img + ".png"; //path + "\\temp\\" + actual_img + ".png";
             object result = null; // wyjście default
+            string dicom_name = actual_instance + "_segm.dcm";
+            string mask_name = actual_instance + "_segmMask.dcm";
 
             MLApp.MLApp matlab = MatlabInitialize();
-            matlab.Execute(@"cd " + path);
-            matlab.Feval("OrthancSend", 0, out result, path_n, file_path, im_path); //wywołanie funkcji
+            //send dicom
+            matlab.Execute(@"cd " + path); //lokalizacja funkcji MATLAB-a
+            matlab.Feval("OrthancSendDicom", 0, out result, path_n, im_path, file_path, dicom_name, mask_name, badanie); //wywołanie funkcji
         }
 
         // FUNKCJE KONSOLOWE
@@ -723,11 +726,14 @@ namespace KWDM_Segm
             string path = System.AppDomain.CurrentDomain.BaseDirectory + "\\ORTHANC";
             object result = null; // wyjście default
 
+
+            //send dicom
             matlab.Execute(@"cd " + path); //lokalizacja funkcji MATLAB-a
-            matlab.Feval("OrthancSend", 1, out result, URL, dicom_name); //wywołanie funkcji
+            matlab.Feval("OrthancSend", 1, out result, URL, dicom_name, badanie); //wywołanie funkcji
             object[] res = result as object[]; //wyniki
             string reply = res[0].ToString();
             return reply;
+
         }
 
         private void DodajMatlab()
@@ -753,6 +759,25 @@ namespace KWDM_Segm
                 OrthStop();
                 System.Windows.MessageBox.Show(reply, "Wysyłanie plików na serwer DICOM - log");
             }
+        }
+
+        private void OverlayImg_Checked(object sender, RoutedEventArgs e)
+        {
+            string file_path = path + "\\temp";
+            string dicom_path = "\\" + actual_instance + ".dcm"; //+ actual_img + ".png"; //path + "\\temp\\" + actual_img + ".png";
+            object result = null; // wyjście default
+            string im_path = "\\segmCV.png";
+
+            MLApp.MLApp matlab = MatlabInitialize();
+            matlab.Execute(@"cd " + path);
+            matlab.Feval("OverlayImg", 0, out result, file_path, dicom_path, im_path); //wywołanie funkcji
+
+            DispImage("maskOver", 1);
+        }
+
+        private void OverlayImg_Unchecked(object sender, RoutedEventArgs e)
+        {
+            DispImage(segm_method, 1);
         }
     }
 }
