@@ -37,6 +37,7 @@ namespace KWDM_Segm
         public List<string> lista_pacjentow;
         public List<string> lista_id;
         public List<string> lista_serii;
+        public List<string> lista_maski;
         public string badanie;
         public string info;
         public string path = System.AppDomain.CurrentDomain.BaseDirectory + "ORTHANC";
@@ -45,6 +46,7 @@ namespace KWDM_Segm
         public string segm_method = "segmCV";
         System.Windows.Point currentPoint = new System.Windows.Point();
         public int fl = 0;
+        public int flaga_maski = 0;
         
 
         public MainWindow()
@@ -107,7 +109,8 @@ namespace KWDM_Segm
 
                 if (list_name == "ListaPacjentow") { WczytajBadaniaMatlab(list_value); }
                 else if (list_name == "ListaBadan") { WczytajSerieMatlab(list_string); }
-                else if (list_name == "ListaSerii") { WczytajInstancjeMatlab(list_value); }
+                else if (list_name == "ListaSerii") { list_value = (sender as System.Windows.Controls.ListBox).SelectedValue.ToString(); WczytajInstancjeMatlab(list_value); flaga_maski = 0; }
+                else if (list_name == "ListaMaski") { list_value = (sender as System.Windows.Controls.ListBox).SelectedValue.ToString(); WczytajInstancjeMatlab(list_value); flaga_maski = 1; }
                 else { WczytajObrazMatlab(list_string); } //ListaInstancji
             }
         }
@@ -423,6 +426,17 @@ namespace KWDM_Segm
             ZapiszButton.IsEnabled = false;
             Raport.IsEnabled = false;
             SendServer.IsEnabled = false;
+
+
+            matlab.Execute(@"cd " + path);
+            object result2 = null; // wyjście default
+            matlab.Feval("OrthSeriesSEGM", 1, out result2, list_string); //wywołanie funkcji
+            object[] res2 = result2 as object[];
+            OrthStop();
+
+            res2[0] = RemoveLastEscape(res2[0].ToString());
+            lista_maski = new List<string>(Regex.Split(res2[0].ToString(), "\n"));
+            ListaMaski.ItemsSource = lista_maski;
         }
 
         private void WczytajInstancjeMatlab(string list_val_studyid)
@@ -430,20 +444,21 @@ namespace KWDM_Segm
             MLApp.MLApp matlab = MatlabInitialize();
             OrthStart();
 
-            matlab.Execute(@"cd " + path);
-            object result = null; // wyjście default
-            matlab.Feval("OrthInstances", 2, out result, badanie, int.Parse(list_val_studyid) + 1); //wywołanie funkcji
-            object[] res = result as object[];
-            OrthStop();
+           matlab.Execute(@"cd " + path);
+           object result = null; // wyjście default
+                                
+           matlab.Feval("OrthInstances", 2, out result, badanie, list_val_studyid);
+           object[] res = result as object[];
+           OrthStop();
 
-            res[0] = RemoveLastEscape(res[0].ToString());
-            List<string> lista_instancji = new List<string>(Regex.Split(res[0].ToString(), "\n"));
+           res[0] = RemoveLastEscape(res[0].ToString());
+           List<string> lista_instancji = new List<string>(Regex.Split(res[0].ToString(), "\n"));
 
-            info = Regex.Replace(res[1].ToString(), @"[_]", string.Empty); //jak w pacjentach
-            info = RemoveLastEscape(info);
-            DaneObrazoweLabel.Content = info;
+           info = Regex.Replace(res[1].ToString(), @"[_]", string.Empty); //jak w pacjentach
+           info = RemoveLastEscape(info);
+           DaneObrazoweLabel.Content = info;
+           ListaInstancji.ItemsSource = lista_instancji;
 
-            ListaInstancji.ItemsSource = lista_instancji;
             ImageO1.Source = null;
             ImageO2.Source = null;
             image.Source = null;
@@ -478,7 +493,6 @@ namespace KWDM_Segm
             //});
             //t.Wait();
             //t.Dispose();
-
             DispImage(actual_img, 0); //wyświetlenie obrazu oryginalnego
             image.Source = null;
             IntensywnoscLabel.Visibility = Visibility.Hidden;

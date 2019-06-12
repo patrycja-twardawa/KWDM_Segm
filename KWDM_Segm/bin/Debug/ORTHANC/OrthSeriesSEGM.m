@@ -1,4 +1,4 @@
-function [series] = OrthSeries(study)
+function [series_segm] = OrthSeriesSEGM(study)
     addpath('.\jsonlab');
     URL = 'http://localhost:8042'; %% adres serwera
     

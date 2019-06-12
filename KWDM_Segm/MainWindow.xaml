@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KWDM_Segm"
         mc:Ignorable="d"
-        Title="Segmentacja Naskórka" Height="660" Width="1065" Background="White" BorderBrush="Azure">
-    <Grid Margin="0,0,3.6,-38.2">
+        Title="Segmentacja Naskórka" Height="747.6" Width="1065" Background="White" BorderBrush="Azure">
+    <Grid Margin="0,0,3.4,-5.4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition Width="0*"/>
@@ -25,7 +25,7 @@
         <Label Content="PRZYBORNIK" Grid.Column="3" HorizontalAlignment="Left" Height="30" Margin="716.6,485,0,0" VerticalAlignment="Top" Width="140" FontSize="15"/>
         <Label Content="LISTA BADAŃ" Grid.Column="2" HorizontalAlignment="Left" Height="30" Margin="24,152,0,0" VerticalAlignment="Top" Width="162" FontSize="15" Grid.ColumnSpan="2"/>
         <Label Content="LISTA SERII" Grid.Column="2" HorizontalAlignment="Left" Height="30" Margin="24,253,0,0" VerticalAlignment="Top" Width="162" FontSize="15" Grid.ColumnSpan="2"/>
-        <Label Content="LISTA INSTANCJI" Grid.Column="2" HorizontalAlignment="Left" Height="30" Margin="24,351,0,0" VerticalAlignment="Top" Width="162" FontSize="15" Grid.ColumnSpan="2"/>
+        <Label Content="LISTA INSTANCJI" Grid.Column="2" HorizontalAlignment="Left" Height="30" Margin="24,457,0,0" VerticalAlignment="Top" Width="162" FontSize="15" Grid.ColumnSpan="2"/>
         <Label x:Name="label" Panel.ZIndex="4" Content="WYKRES INTENSYWNOŚCI" FontSize="15" Grid.Column="3" HorizontalAlignment="Left" Height="30" Margin="716.6,168,0,0" VerticalAlignment="Top" Width="230"/>
         <Label Visibility="Hidden" Panel.ZIndex="2" Name="IntensywnoscLabel" Content="INTENSYWNOŚĆ PIKSELI" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="21" Margin="745.6,442,33.2,0" VerticalAlignment="Top" Width="230" FontSize="10"/>
         <Label Visibility="Hidden" Panel.ZIndex="3" Name="IloscLabel" Content="ILOŚĆ PIKSELI" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="21" Margin="604.6,320,146.2,0" VerticalAlignment="Top" Width="258" FontSize="10" RenderTransformOrigin="0.5,0.5">
@@ -52,12 +52,12 @@
         <ListBox Name="ListaPacjentow" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="60" Margin="24,87,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="ListBox_SelectionChanged"/>
         <ListBox Name="ListaBadan" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="60" Margin="24,187,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="ListBox_SelectionChanged"/>
         <ListBox x:Name="ListaSerii" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="60" Margin="24,288,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="ListBox_SelectionChanged"/>
-        <ListBox x:Name="ListaInstancji" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="60" Margin="24,385,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="ListBox_SelectionChanged"/>
+        <ListBox x:Name="ListaInstancji" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="60" Margin="24,491,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="ListBox_SelectionChanged"/>
 
-        <Button Content="AKTUALIZUJ" Name="AktualizujButton" Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="37" Margin="24,462,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Grid.ColumnSpan="2" Background="White"/>
-        <Button Content="DODAJ PACJENTA" Name="DodajButton"  Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="37" Margin="24,507,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Grid.ColumnSpan="2" Background="White"/>
+        <Button Content="AKTUALIZUJ" Name="AktualizujButton" Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="37" Margin="24,568,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Grid.ColumnSpan="2" Background="White"/>
+        <Button Content="DODAJ PACJENTA" Name="DodajButton"  Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="37" Margin="24,613,0,0" VerticalAlignment="Top" Width="162" Click="Button_Click" Grid.ColumnSpan="2" Background="White"/>
         <Button Content="ZAPISZ NA DYSKU" Name="ZapiszButton" IsEnabled="False" Grid.Column="3" FontSize="10" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="22" Margin="446.6,454,0,0" VerticalAlignment="Top" Width="110" Click="Button_Click_Zapisz" Background="White"/>
-        <Button Name="Raport" Content="WYGENERUJ RAPORT" IsEnabled="false" Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="37" Margin="25,552,0,0" VerticalAlignment="Top" Width="161" Click="Button_Click" Background="White" Grid.ColumnSpan="2"/>
+        <Button Name="Raport" Content="WYGENERUJ RAPORT" IsEnabled="false" Grid.Column="2" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="37" Margin="25,658,0,0" VerticalAlignment="Top" Width="161" Click="Button_Click" Background="White" Grid.ColumnSpan="2"/>
 
         <Button Name ="pedzelButton" Grid.Column="3" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="731,521,0,0" VerticalAlignment="Top" Width="32" Click="Button_Click" Background="White">
             <Image VerticalAlignment="Center" HorizontalAlignment="Center" Source="Images/Pedzel.png" Height="30" Width="30" IsEnabled="True"/>
@@ -84,5 +84,7 @@
             </InkCanvas.DefaultDrawingAttributes>
         </InkCanvas>
         <CheckBox Name ="overlayImg" Content="Nałóż maskę na obraz" Grid.Column="3" HorizontalAlignment="Left" Margin="446.6,435,0,0" VerticalAlignment="Top" Checked="OverlayImg_Checked" Unchecked="OverlayImg_Unchecked"/>
+        <Label Content="DOSTĘPNE MASKI" Grid.Column="2" HorizontalAlignment="Left" Height="30" Margin="25,357,0,0" VerticalAlignment="Top" Width="176" FontSize="15" Grid.ColumnSpan="2"/>
+        <ListBox x:Name="ListaMaski" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="60" Margin="25,392,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="ListBox_SelectionChanged"/>
     </Grid>
 </Window>

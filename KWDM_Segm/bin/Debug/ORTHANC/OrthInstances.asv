@@ -36,6 +36,6 @@ function[instances, patient_info] = OrthInstances(study, serie_id)
     instanc = OrthancGetInstance(URL, serie_id);
     
     for i = 1 : numel(instanc)
-        instances(i,:) = instanc{1,i}.ID;
+        instances(i,:) = instanc{1,i{serie_id}.Instances{i};
     end
 end
