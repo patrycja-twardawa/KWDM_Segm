@@ -37,6 +37,7 @@ namespace KWDM_Segm
         public List<string> lista_pacjentow;
         public List<string> lista_id;
         public List<string> lista_serii;
+        public List<string> lista_instancji;
         public List<string> lista_maski;
         public string badanie;
         public string info;
@@ -452,7 +453,7 @@ namespace KWDM_Segm
            OrthStop();
 
            res[0] = RemoveLastEscape(res[0].ToString());
-           List<string> lista_instancji = new List<string>(Regex.Split(res[0].ToString(), "\n"));
+           lista_instancji = new List<string>(Regex.Split(res[0].ToString(), "\n"));
 
            info = Regex.Replace(res[1].ToString(), @"[_]", string.Empty); //jak w pacjentach
            info = RemoveLastEscape(info);
@@ -471,35 +472,90 @@ namespace KWDM_Segm
 
         private void WczytajObrazMatlab(string list_string)
         {
-            if (Directory.Exists(path + "\\temp"))
+            if (flaga_maski == 0)
             {
-                System.IO.DirectoryInfo di = new DirectoryInfo(path + "\\temp");
-                foreach (FileInfo file in di.GetFiles()) { file.Delete(); }
-                di.Delete();
+                if (Directory.Exists(path + "\\temp"))
+                {
+                    System.IO.DirectoryInfo di = new DirectoryInfo(path + "\\temp");
+                    foreach (FileInfo file in di.GetFiles()) { file.Delete(); }
+                    di.Delete();
+                }
+                Directory.CreateDirectory(path + "\\temp");
+
+                MLApp.MLApp matlab = MatlabInitialize();
+                actual_instance = list_string;
+                OrthStart();
+
+                matlab.Execute(@"cd " + path);
+                object result = null; // wyjście default
+                object result2 = null;
+                //Task t = Task.Run(() => {
+                matlab.Feval("OrthancDownloadInstance", 1, out result, list_string); //wywołanie funkcji});
+                OrthStop();
+                matlab.Feval("DicomConvert", 0, out result2, list_string); //przekształcenie na format png - I TAK ZOSTAWIĆ, OBRAZ BĘDZIE SŁUŻYĆ TYLKO DO WYŚWIETLANIA W OKNIE PROGRAMU
+                                                                           //});
+                                                                           //t.Wait();
+                                                                           //t.Dispose();
+                DispImage(actual_img, 0); //wyświetlenie obrazu oryginalnego
+                image.Source = null;
+                IntensywnoscLabel.Visibility = Visibility.Hidden;
+                IloscLabel.Visibility = Visibility.Hidden;
+                ZapiszButton.IsEnabled = false;
+                Raport.IsEnabled = false;
+                SendServer.IsEnabled = false;
             }
-            Directory.CreateDirectory(path + "\\temp");
+            else if(flaga_maski == 1)
+            {
+                if (Directory.Exists(path + "\\temp"))
+                {
+                    System.IO.DirectoryInfo di = new DirectoryInfo(path + "\\temp");
+                    foreach (FileInfo file in di.GetFiles()) { file.Delete(); }
+                    di.Delete();
+                }
+                Directory.CreateDirectory(path + "\\temp");
 
-            MLApp.MLApp matlab = MatlabInitialize();
-            actual_instance = list_string;
-            OrthStart();
+                MLApp.MLApp matlab = MatlabInitialize();
+                actual_instance = list_string;
+                OrthStart();
 
-            matlab.Execute(@"cd " + path);
-            object result = null; // wyjście default
-            object result2 = null;
-            //Task t = Task.Run(() => {
-            matlab.Feval("OrthancDownloadInstance", 1, out result, list_string); //wywołanie funkcji});
-            OrthStop();
-            matlab.Feval("DicomConvert", 0, out result2, list_string); //przekształcenie na format png - I TAK ZOSTAWIĆ, OBRAZ BĘDZIE SŁUŻYĆ TYLKO DO WYŚWIETLANIA W OKNIE PROGRAMU
-            //});
-            //t.Wait();
-            //t.Dispose();
-            DispImage(actual_img, 0); //wyświetlenie obrazu oryginalnego
-            image.Source = null;
-            IntensywnoscLabel.Visibility = Visibility.Hidden;
-            IloscLabel.Visibility = Visibility.Hidden;
-            ZapiszButton.IsEnabled = false;
-            Raport.IsEnabled = false;
-            SendServer.IsEnabled = false;
+                matlab.Execute(@"cd " + path);
+                object result = null; // wyjście default
+                object result2 = null;
+                //Task t = Task.Run(() => {
+                matlab.Feval("OrthancDownloadInstance", 1, out result, lista_instancji[0]); //wywołanie funkcji});
+                OrthStop();
+                matlab.Feval("DicomConvert", 0, out result2, lista_instancji[0]); //przekształcenie na format png - I TAK ZOSTAWIĆ, OBRAZ BĘDZIE SŁUŻYĆ TYLKO DO WYŚWIETLANIA W OKNIE PROGRAMU
+                                                                           //});
+                                                                           //t.Wait();
+                                                                           //t.Dispose();
+                DispImage(actual_img, 0); //wyświetlenie obrazu oryginalnego
+
+                /****/
+    
+                OrthStart();
+
+                matlab.Execute(@"cd " + path);
+                object result21 = null; // wyjście default
+                object result22 = null;
+                //Task t = Task.Run(() => {
+                matlab.Feval("OrthancDownloadInstance", 1, out result21, lista_instancji[1]); //wywołanie funkcji});
+                OrthStop();
+                matlab.Feval("DicomConvertMask", 0, out result22, lista_instancji[1]); //przekształcenie na format png - I TAK ZOSTAWIĆ, OBRAZ BĘDZIE SŁUŻYĆ TYLKO DO WYŚWIETLANIA W OKNIE PROGRAMU
+                                                                           //});
+                                                                           //t.Wait();
+                string nm = "2";                                                         //t.Dispose();
+                DispImage(nm, 1); //wyświetlenie obrazu oryginalnego
+
+
+                image.Source = null;
+                IntensywnoscLabel.Visibility = Visibility.Hidden;
+                IloscLabel.Visibility = Visibility.Hidden;
+                ZapiszButton.IsEnabled = false;
+                Raport.IsEnabled = false;
+                SendServer.IsEnabled = false;
+
+
+            }
         }
 
         public void SegmentujMatlab()
