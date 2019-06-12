@@ -68,6 +68,7 @@ namespace KWDM_Segm
             else if (name == "pedzelButton") { Pedzel(); }
             else if(name == "SendServer") { wyslijDICOM();  }
             else if (name == "Raport") { CreateDocument(); }
+            else if (name == "LinijkaButton") { Linijka(); }
         }
 
         private void Pedzel()
@@ -100,6 +101,19 @@ namespace KWDM_Segm
             bitmap.EndInit();*/
         }
 
+        private void Linijka()
+        {
+
+            paintSurface.AddHandler(InkCanvas.MouseDownEvent, new MouseButtonEventHandler(Canvas_MouseDown), true);
+            attribute.Width = 10;
+            attribute.Height = 10;
+           
+        
+
+
+
+        }
+
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string list_value = (sender as System.Windows.Controls.ListBox).SelectedIndex.ToString();
@@ -126,10 +140,43 @@ namespace KWDM_Segm
             paintSurface.EditingMode = InkCanvasEditingMode.Ink;
         }
 
-        private void Canvas_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
+
+        double[] pointDistance = new double[4];
+        double pixelSpacing = 2.0;
+        int ind = 0;
+
+        private void Canvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (e.ButtonState == MouseButtonState.Pressed)
-                currentPoint = e.GetPosition(this);
+            if (ind < 4)
+            {
+                if (e.ButtonState == MouseButtonState.Pressed)
+                {
+                    currentPoint = e.GetPosition(this);
+
+
+                    pointDistance[ind] = currentPoint.X;
+                    pointDistance[ind + 1] = currentPoint.Y;
+                    ind += 2;
+
+
+                }
+            }
+
+            if (ind == 4)
+            {
+
+                double distance = (Math.Sqrt((Math.Pow(pointDistance[0] - pointDistance[2], 2)
+                 + Math.Pow(pointDistance[1] - pointDistance[3], 2)))) * pixelSpacing;
+
+                distance = Math.Round(distance,2);
+
+                System.Windows.MessageBox.Show("Długość: " + distance.ToString()+ " mm"); // w mm juz 
+
+                ind = 0;
+                paintSurface.Strokes.Clear();
+
+            }
+
         }
 
         private void Canvas_MouseMove_1(object sender, System.Windows.Input.MouseEventArgs e)
