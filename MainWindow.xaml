@@ -78,7 +78,7 @@
         <Image Name="ImageO2" Source="Images/Blank.png" HorizontalAlignment="Left" Height="230" Margin="448.2,203,0,0" VerticalAlignment="Top" Width="230" Grid.Column="3" Stretch="UniformToFill"/>
         <Image Name="image" Panel.ZIndex="1" Source="Images/Blank.png" Grid.Column="3" HorizontalAlignment="Left" Height="276" Margin="716.6,187,0,0" VerticalAlignment="Top" Width="276" Stretch="Fill"/>
 
-        <InkCanvas  Grid.Column="3" Background ="Transparent" HorizontalAlignment="Left" Height="230" Margin="447.2,203,0,0" VerticalAlignment="Top" Width="230" Name="paintSurface"  MouseDown="Canvas_MouseDown_1" MouseMove="Canvas_MouseMove_1">
+        <InkCanvas  Grid.Column="3" Background ="Transparent" HorizontalAlignment="Left" Height="230" Margin="447.2,203,0,0" VerticalAlignment="Top" Width="230" Name="paintSurface"  MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove_1">
             <InkCanvas.DefaultDrawingAttributes>
                 <DrawingAttributes x:Name="attribute" Width="5" Height="5" Color="White"/>
             </InkCanvas.DefaultDrawingAttributes>
